@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Consulta COF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Lora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="page-home">
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="topbar-icon-link topbar-home-link" href="/" aria-label="Pagina inicial" title="Pagina inicial">
+          <span class="sr-only">Pagina inicial</span>
+        </a>
+        <a class="topbar-icon-link topbar-index-link" href="/indice.html" aria-label="Indice das aulas" title="Indice das aulas">
+          <span class="sr-only">Indice das aulas</span>
+        </a>
+      </header>
+
+      <section class="list-header">
+        <p class="eyebrow">Corpus local</p>
+        <h1>Consulta web do Curso Online de Filosofia</h1>
+        <p class="list-description">
+          Descubra em quais aulas um tema aparece, abra uma aula inteira e inspecione
+          trechos tecnicos do corpus com uma leitura mais limpa.
+        </p>
+        <div class="header-shortcuts">
+          <a class="button-link header-index-link" href="/indice.html">Ver indice completo das 585 aulas</a>
+        </div>
+      </section>
+
+      <main>
+        <section class="action-list" aria-label="Acoes principais">
+          <article class="action-item">
+            <div class="action-number">01</div>
+            <div class="action-body">
+              <h2 class="action-title">Buscar tema no curso</h2>
+              <p class="action-description">
+                Digite um termo e veja em quais aulas ele aparece. Para a maioria
+                das consultas, basta pesquisar o texto e abrir os resultados.
+              </p>
+            </div>
+            <form id="search-form" class="action-form action-form-search">
+              <label class="sr-only" for="search-query">Texto</label>
+              <input
+                id="search-query"
+                class="text-input"
+                name="q"
+                type="text"
+                placeholder="Ex.: necrologio, simples apreensao, Husserl"
+              />
+              <button class="icon-button icon-search-submit" type="submit" aria-label="Pesquisar agora">
+                <span class="sr-only">Pesquisar agora</span>
+              </button>
+              <span class="lesson-term-hint">busca automatica</span>
+            </form>
+          </article>
+
+          <div class="action-extras">
+            <p class="extras-copy">
+              A busca mostra as aulas encontradas, a quantidade de ocorrencias e um
+              trecho inicial para orientar a leitura.
+            </p>
+            <div class="example-chips" aria-label="Exemplos de busca">
+              <button class="chip-button example-query" type="button" data-query="necrológio">
+                necrológio
+              </button>
+              <button
+                class="chip-button example-query"
+                type="button"
+                data-query="simples apreensão"
+              >
+                simples apreensão
+              </button>
+              <button class="chip-button example-query" type="button" data-query="Husserl">
+                Husserl
+              </button>
+              <button
+                class="chip-button example-query"
+                type="button"
+                data-query="biblioteca interior"
+              >
+                biblioteca interior
+              </button>
+            </div>
+            <details class="advanced-box">
+              <summary>Opcoes avancadas</summary>
+              <div class="advanced-grid">
+                <label>
+                  Linhas antes
+                  <input id="search-before" class="narrow-input" type="number" min="0" max="20" value="2" />
+                </label>
+                <label>
+                  Linhas depois
+                  <input id="search-after" class="narrow-input" type="number" min="0" max="50" value="6" />
+                </label>
+                <label>
+                  Max. de resultados
+                  <input id="search-limit" class="narrow-input" type="number" min="1" max="585" value="12" />
+                </label>
+              </div>
+            </details>
+          </div>
+
+          <article class="action-item">
+            <div class="action-number">02</div>
+            <div class="action-body">
+              <h2 class="action-title">Abrir aula inteira</h2>
+              <p class="action-description">
+                Va direto para uma aula especifica usando o numero registrado no indice mestre.
+              </p>
+            </div>
+            <form id="aula-form" class="action-form">
+              <label class="sr-only" for="aula-number">Numero da aula</label>
+              <input
+                id="aula-number"
+                class="narrow-input"
+                type="number"
+                min="1"
+                max="585"
+                value="1"
+              />
+              <button class="icon-button icon-open-aula" type="submit" aria-label="Abrir aula">
+                <span class="sr-only">Abrir aula</span>
+              </button>
+            </form>
+          </article>
+        </section>
+
+        <section class="results-section">
+          <div class="results-head">
+            <div>
+              <p class="eyebrow">Leitura</p>
+              <h2 id="results-title">Resultados</h2>
+            </div>
+            <p id="results-subtitle">Use uma das acoes acima para consultar o corpus.</p>
+          </div>
+          <div id="feedback" class="feedback" hidden></div>
+          <div id="results" class="results"></div>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <span>Projeto local do COF para consulta por aula e por tema.</span>
+        <a class="footer-link" href="/indice.html">Abrir indice</a>
+      </footer>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

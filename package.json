@@ -1,0 +1,13 @@
+{
+  "name": "projeto-filosofia-olavo-cof",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Leitor e indice web do Curso Online de Filosofia.",
+  "scripts": {
+    "start": "node web/server.js",
+    "dev": "node web/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

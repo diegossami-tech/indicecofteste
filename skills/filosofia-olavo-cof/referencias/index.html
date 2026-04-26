@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Índice Completo das Aulas do COF</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; color: #222; }
+
+    header { background: #1a1a2e; color: #fff; padding: 28px 32px; }
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+    header p { margin-top: 6px; font-size: 0.9rem; color: #bbb; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+    .cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .card { background: #fff; border-radius: 8px; padding: 14px 20px; flex: 1; min-width: 150px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .card .n { font-size: 2rem; font-weight: 700; color: #1a1a2e; }
+    .card .l { font-size: 0.78rem; color: #777; margin-top: 2px; }
+
+    .note { background: #eaf4fb; border-left: 4px solid #2980b9; padding: 14px 18px; border-radius: 6px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.7; }
+    .note strong { color: #1a5276; }
+
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+    .controls input[type="text"] { padding: 9px 14px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; width: 280px; }
+    .controls select { padding: 9px 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
+    .controls label { font-size: 13px; color: #555; display: flex; align-items: center; gap: 5px; }
+
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.1); }
+    thead { background: #1a1a2e; color: #fff; }
+    th { padding: 11px 14px; text-align: left; font-size: 13px; font-weight: 600; }
+    td { padding: 9px 14px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(0,0,0,.03); }
+
+    .row-resumo { border-left: 4px solid #27ae60; }
+    .row-pendente { border-left: 4px solid #e0e0e0; }
+    .row-gap { border-left: 4px solid #e74c3c; background: #fff8f8; }
+
+    .badge-resumo { background: #d5f5e3; color: #1e8449; border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 600; }
+    .badge-pendente { background: #f0f0f0; color: #888; border-radius: 4px; padding: 2px 7px; font-size: 11px; }
+    .badge-gap { background: #fde8e8; color: #c0392b; border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 600; }
+
+    .aula-num { font-weight: 700; color: #1a1a2e; }
+    .linha-num { font-family: monospace; color: #555; }
+    .data-cell { color: #555; white-space: nowrap; }
+    .resumo-text { max-width: 560px; line-height: 1.5; color: #333; }
+    .obs-text { font-size: 11px; color: #888; margin-top: 4px; font-style: italic; }
+
+    .count-info { font-size: 13px; color: #666; margin-bottom: 8px; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: #aaa; }
+
+    @media (max-width: 700px) {
+      th:nth-child(4), td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Índice Completo das Aulas do COF</h1>
+  <p>Curso Online de Filosofia — Olavo de Carvalho &nbsp;·&nbsp; Aulas 01–585</p>
+</header>
+
+<div class="container">
+
+  <div class="cards">
+    <div class="card"><div class="n" id="stat-total">585</div><div class="l">Aulas totais</div></div>
+    <div class="card"><div class="n" id="stat-resumo" style="color:#27ae60">35</div><div class="l">Com resumo</div></div>
+    <div class="card"><div class="n" id="stat-pendente" style="color:#888">~547</div><div class="l">Resumo pendente</div></div>
+    <div class="card"><div class="n" id="stat-gap" style="color:#e74c3c">~115</div><div class="l">Sem cabeçalho (gap OCR)</div></div>
+  </div>
+
+  <div class="note">
+    <strong>Como usar:</strong> para consultar uma aula, use <code>Read</code> no corpus com <code>offset = linha_de_inicio</code> e <code>limit = 200-400</code>. Para confirmar, verifique a data na segunda linha do bloco.<br>
+    <strong>Mapa de linhas:</strong> gerado por varredura mecânica — 100% confiável. <strong>Datas/resumos:</strong> extraídos por leitura direta; entradas <em>[resumo pendente]</em> ainda não foram lidas. <strong>Erros de OCR:</strong> cabeçalhos quebrados em várias passagens — marcados na tabela.
+  </div>
+
+  <div class="controls">
+    <input type="text" id="busca" placeholder="Buscar por aula, data, tema..." oninput="filtrar()">
+    <select id="filtroTipo" onchange="filtrar()">
+      <option value="">Todas as aulas</option>
+      <option value="resumo">Com resumo</option>
+      <option value="pendente">Resumo pendente</option>
+      <option value="gap">Sem cabeçalho (gap OCR)</option>
+    </select>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:#27ae60"></span> Com resumo</span>
+    <span><span class="dot" style="background:#ccc"></span> Resumo pendente</span>
+    <span><span class="dot" style="background:#e74c3c"></span> Sem cabeçalho (gap OCR)</span>
+  </div>
+
+  <div class="count-info" id="count-info"></div>
+
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>Aula</th>
+        <th>Linha</th>
+        <th>Data</th>
+        <th>Resumo / Observação</th>
+      </tr>
+    </thead>
+    <tbody id="corpo"></tbody>
+  </table>
+
+</div>
+
+<footer>Índice gerado a partir de varredura mecânica do corpus COF &nbsp;·&nbsp; Resumos extraídos por leitura direta</footer>
+
+<script>
+// tipo: 'resumo' | 'pendente' | 'gap'
+const dados = [
+  {a:"01",l:4,d:"14/03/2009",r:"Aula inaugural. Normas gerais do curso, equipe de transcrição, instruções práticas. Apresentação do espírito do curso, bênção a Pe. Pio de Pietrelcina e à Virgem. Instruções sobre formação de grupos de estudo.",o:"",t:"resumo"},
+  {a:"02",l:1542,d:"21/03/2009",r:"Exercício do necrológio: como deve ser feito (em terceira pessoa, retrato da vida fechada). Mallarmé \"tel qu'en Lui-même enfin l'éternité le change\". Modelo ideal e o que deve ser legado a outras pessoas.",o:"",t:"resumo"},
+  {a:"03",l:3670,d:"04/04/2009",r:"Avaliação periódica do modelo ideal. Princípio de moralidade e ausência dele. Santo Agostinho: amor sui (próprio) vs. amor Dei (de Deus). Crítica ao \"amar o próximo como a si mesmo\" sem auto-conhecimento.",o:"",t:"resumo"},
+  {a:"04",l:5080,d:"18/04/2009",r:"Continuação do necrológio com Louis Lavelle: os \"momentos privilegiados\" da vida e a sabedoria como conservação da memória deles. A grande filosofia como descrição desses momentos.",o:"",t:"resumo"},
+  {a:"05",l:7143,d:"25/04/2009",r:"Importância da formação literária como preliminar ao estudo da filosofia. Benedetto Croce: o pressuposto da atividade lógica são as representações ou intuições. O \"espírito fantástico\" como pressuposto do \"espírito lógico\".",o:"",t:"resumo"},
+  {a:"06",l:8722,d:"03/05/2009",r:"Eric Voegelin: formação biográfica e intelectual em Viena, contraste entre Hans Kelsen (Teoria Pura do Direito) e Othmar Spann. Como o esquema biográfico ajuda a entender obras interrompidas e retomadas.",o:"",t:"resumo"},
+  {a:"07",l:9939,d:"16/05/2009",r:"Sentido do \"virtual\" (de virtus, potência). Distinção atual/virtual em filosofia. A biografia humana como sempre virtual. A personalidade como existindo virtualmente.",o:"",t:"resumo"},
+  {a:"08",l:11386,d:"23/05/2009",r:"Estrutura da formação filosófica para o brasileiro: blocos independentes que devem ser articulados. A filosofia como modelo da vida intelectual em geral. Referência a Sertillanges (\"A Vida Intelectual\").",o:"",t:"resumo"},
+  {a:"09",l:12939,d:"06/06/2009",r:"Princípios da ética da vida intelectual. Importância da técnica antes do conteúdo. Seleção de leituras por tema, não cronológica. Domínio das bibliografias e instrumentos de pesquisa.",o:"",t:"resumo"},
+  {a:"10",l:14424,d:"13/06/2009",r:"Ausência de opinião pública letrada no Brasil há quarenta anos. A \"revolução cultural gramsciana\" e a ocupação dos espaços nas universidades por grupo ativista militante que simula o papel da classe letrada.",o:"",t:"resumo"},
+  {a:"11",l:16604,d:"20/06/2009",r:"Ausência de postos a serem preenchidos no Brasil — necessidade de criar novas funções e nova vida intelectual. Inadequação da liberal education americana ao contexto brasileiro.",o:"",t:"resumo"},
+  {a:"12",l:19010,d:"20/06/2009",r:"Continuação. Resposta a pergunta sobre determinismo e livre arbítrio. Discussão sobre pré-determinação e a impossibilidade de pensar alternativas se tudo está pré-determinado.",o:"",t:"resumo"},
+  {a:"13",l:20870,d:"04/07/2009",r:"Comentário sobre status quaestionis de aluno (Mário Chainho, Portugal): inventário dos exercícios e práticas pedidos até então. Aulas como centro pedagógico do curso (não as leituras).",o:"",t:"resumo"},
+  {a:"14",l:22739,d:"11/07/2009",r:"A busca da verdade como problema pessoal de orientação na vida. Crítica às polêmicas relativismo/objetivismo. Primeira experiência da verdade como diferenciação dentro da experiência geral.",o:"",t:"resumo"},
+  {a:"15",l:24443,d:"18/07/2009",r:"Comentário a carta sobre Kierkegaard: \"a verdade não é questão de conhecer isto ou aquilo, mas sim de estar nela\". A verdade como domínio em que se está ou não se está.",o:"",t:"resumo"},
+  {a:"16",l:26557,d:"25/07/2009",r:"Condições sócio-culturais da atividade intelectual no Brasil. O que é alta cultura. Apropriação progressiva da linguagem desde o nascimento.",o:"",t:"resumo"},
+  {a:"17",l:28343,d:"01/08/2009",r:"Anúncio do vídeo \"A Imaginação e a Unidade do Real\". Pedido de não divulgação do material do curso. Risco de fragmentos espalhados criarem confusão. A produção de opinião no Brasil com pouco material.",o:"",t:"resumo"},
+  {a:"18",l:30214,d:"18/08/2009",r:"Distinções elementares para a compreensão de fatos humanos. Leitura e comentário meticuloso de texto sobre os fundamentos da análise de fenômenos humanos.",o:"",t:"resumo"},
+  {a:"19",l:31997,d:"15/08/2009",r:"Dois exercícios práticos baseados na distinção entre compreender os próprios pensamentos e compreender alguma coisa. Crítica à educação que se refere apenas ao mundo dos pensamentos.",o:"",t:"resumo"},
+  {a:"20",l:33681,d:"22/08/2009",r:"Trabalho com texto de Joseph Maréchal (\"O Ponto de Partida da Metafísica\") e o poema de Camões \"Sôbolos rios que vão\". Três níveis de trabalho na leitura de qualquer texto filosófico.",o:"",t:"resumo"},
+  {a:"21",l:35399,d:"29/08/2009",r:"Continuação do trabalho com Maréchal. Como proceder na leitura — não pesquisar toda a filosofia dos autores citados, mas localizar pontos específicos referenciados, montar a \"figura do conflito\" na imaginação. Heráclito.",o:"",t:"resumo"},
+  {a:"22",l:36651,d:"05/09/2009",r:"Considerações sobre o ambiente histórico-cultural brasileiro e mundial. Recomendação de abstenção de atividade pública por cinco ou seis anos. Necessidade de opinião altamente qualificada.",o:"",t:"resumo"},
+  {a:"23",l:38127,d:"13/09/2009",r:"Retomada do tema da imaginação a partir de carta da aluna Luciane Amato. Imaginação na formação intelectual.",o:"",t:"resumo"},
+  {a:"24",l:39563,d:"19/09/2009",r:"Última aula do curso \"Conceitos Fundamentais da Psicologia\" (Colonial Heights). Resumo dos temas para os alunos online que não puderam acompanhar a semana inteira.",o:"",t:"resumo"},
+  {a:"25",l:41757,d:"26/09/2009",r:"Lembrete sobre uso do fórum: meio de troca de informações e ajuda mútua, não de debates. Analogia com artes marciais: o estudante de filosofia se compromete a não brigar publicamente.",o:"",t:"resumo"},
+  {a:"26",l:43982,d:"03/10/2009",r:"Pergunta sobre Heinrich Zimmer (\"Filosofias da Índia\"): filosofia como modo de vida, relação discípulo-mestre. Aceitação cega como forma de aprendizagem que conduz à compreensão intuitiva.",o:"",t:"resumo"},
+  {a:"27",l:45095,d:"10/10/2009",r:"Mudança de tom: tema mais \"materialmente filosófico\" depois de muitas aulas técnico-metodológicas. Introdução de questão filosófica substantiva.",o:"transcrição diz 2010, mas sequência indica 2009",t:"resumo"},
+  {a:"28",l:46485,d:"17/10/2009",r:"Obstáculos ao aprendizado e ao desenvolvimento intelectual. No caso brasileiro, raramente são de ordem intelectual real. Crítica à \"inépcia\" monopolizada por professores universitários, políticos e jornalistas.",o:"",t:"resumo"},
+  {a:"29",l:47882,d:"24/10/2009",r:"Objetivo central do curso: formar inteligências autônomas. A alta cultura de um país é feita sempre por cinco ou seis inteligências autônomas criadoras. Algumas centenas de pessoas bastam para sustentar a alta cultura.",o:"",t:"resumo"},
+  {a:"30",l:49235,d:"31/10/2009",r:"Leitura de artigo para o Diário do Comércio sobre o ambiente mental brasileiro. A \"confusão nebulosa, tenebrosa\" como névoa venenosa que penetra os poros e contamina a alma.",o:"",t:"resumo"},
+  {a:"31",l:50678,d:"07/11/2009",r:"Distinção aristotélica entre forma e matéria como um dos \"patamares\" da filosofia — descobertas que ninguém tem o direito de ignorar para não voltar a estágio mais grosseiro do raciocínio.",o:"",t:"resumo"},
+  {a:"32",l:51990,d:"14/11/2009",r:"Ensino de método de relaxamento: relaxamento profundo mantendo a consciência ativa, propício a penetrar em camadas mais profundas. Diferenciado dos métodos para dormir.",o:"",t:"resumo"},
+  {a:"33",l:53456,d:"21/11/2009",r:"Crítica ao estudo da filosofia por método histórico (autor por autor). A filosofia, diferente da literatura, não tem obras com a \"completude\" e \"inteireza\" das obras literárias.",o:"",t:"resumo"},
+  {a:"34",l:55095,d:"28/11/2009",r:"Gravação substituindo aula presencial (Olavo viajando para Nova Iorque). Retomada e aprofundamento dos objetivos do curso. Necessidade periódica de revisitar e fundamentar filosoficamente os objetivos iniciais.",o:"",t:"resumo"},
+  {a:"35",l:56133,d:"05/12/2009",r:"Anúncio de extensão do curso às quintas-feiras: leitura culta e desmontagem semântica de textos em inglês citados ao longo do curso. Distinção entre inglês de turismo e inglês para leitura culta.",o:"",t:"resumo"},
+  {a:"36",l:57629,d:"",r:"",o:"",t:"pendente"},
+  {a:"37",l:59296,d:"",r:"",o:"",t:"pendente"},
+  {a:"38",l:61249,d:"",r:"",o:"",t:"pendente"},
+  {a:"39",l:63089,d:"",r:"",o:"",t:"pendente"},
+  {a:"40",l:64979,d:"",r:"",o:"provável: introdução à simples apreensão (lógica clássica)",t:"pendente"},
+  {a:"41",l:66671,d:"",r:"",o:"",t:"pendente"},
+  {a:"42",l:68559,d:"",r:"",o:"",t:"pendente"},
+  {a:"43",l:70324,d:"",r:"",o:"",t:"pendente"},
+  {a:"44",l:71912,d:"",r:"",o:"",t:"pendente"},
+  {a:"45",l:73546,d:"",r:"",o:"",t:"pendente"},
+  {a:"46",l:75308,d:"",r:"",o:"",t:"pendente"},
+  {a:"47",l:76972,d:"",r:"",o:"",t:"pendente"},
+  {a:"48",l:78802,d:"",r:"",o:"",t:"pendente"},
+  {a:"49",l:80534,d:"",r:"",o:"",t:"pendente"},
+  {a:"50",l:81919,d:"20/03/2010",r:"Lógica clássica: simples apreensão. Aprofundamento com fenomenologia. Forma substancial; crítica a Descartes/Galileu. Círculo de latência; substância vs. estado (\"cadáver é estado, não substância\").",o:"confirmado em índice prévio",t:"resumo"},
+  {a:"51",l:82596,d:"",r:"",o:"",t:"pendente"},
+  {a:"52",l:84131,d:"",r:"",o:"",t:"pendente"},
+  {a:"53",l:85489,d:"",r:"",o:"",t:"pendente"},
+  {a:"54",l:86644,d:"",r:"",o:"",t:"pendente"},
+  {a:"55",l:88076,d:"",r:"",o:"",t:"pendente"},
+  {a:"56",l:89570,d:"",r:"",o:"",t:"pendente"},
+  {a:"57",l:91604,d:"",r:"",o:"",t:"pendente"},
+  {a:"58",l:93003,d:"",r:"",o:"",t:"pendente"},
+  {a:"59",l:94710,d:"",r:"",o:"",t:"pendente"},
+  {a:"60",l:95813,d:"",r:"",o:"",t:"pendente"},
+  {a:"61",l:97259,d:"",r:"",o:"",t:"pendente"},
+  {a:"62",l:98346,d:"",r:"",o:"",t:"pendente"},
+  {a:"63",l:99305,d:"",r:"",o:"",t:"pendente"},
+  {a:"64",l:100640,d:"",r:"",o:"",t:"pendente"},
+  {a:"65",l:102066,d:"",r:"",o:"",t:"pendente"},
+  {a:"66",l:103183,d:"",r:"",o:"",t:"pendente"},
+  {a:"67",l:104771,d:"",r:"",o:"",t:"pendente"},
+  {a:"68",l:106140,d:"",r:"",o:"",t:"pendente"},
+  {a:"69",l:107622,d:"",r:"",o:"",t:"pendente"},
+  {a:"70–76",l:null,d:"—",r:"",o:"Conteúdo provável: continuação da lógica clássica / fenomenologia",t:"gap"},
+  {a:"77",l:120175,d:"",r:"",o:"",t:"pendente"},
+  {a:"78–80",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"81",l:125561,d:"",r:"",o:"corpus traz \"Aula 081\"",t:"pendente"},
+  {a:"82–88",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"89",l:135737,d:"",r:"",o:"",t:"pendente"},
+  {a:"90",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"91",l:138399,d:"",r:"",o:"",t:"pendente"},
+  {a:"92",l:139459,d:"",r:"",o:"",t:"pendente"},
+  {a:"93",l:140790,d:"",r:"",o:"",t:"pendente"},
+  {a:"94",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"95",l:143106,d:"",r:"",o:"",t:"pendente"},
+  {a:"96",l:144051,d:"",r:"",o:"",t:"pendente"},
+  {a:"97",l:144887,d:"",r:"",o:"",t:"pendente"},
+  {a:"98",l:146077,d:"",r:"",o:"",t:"pendente"},
+  {a:"99",l:146627,d:"",r:"",o:"",t:"pendente"},
+  {a:"100",l:148253,d:"02/04/2011",r:"Leitura de clássicos como peças dramáticas (Platão). Pitágoras: números, simbolismo, ilusão de controle. Crítica ao método USP de fichamento (\"penas de amor perdidas\"). Biblioteca interior como objetivo da leitura.",o:"confirmado em índice prévio",t:"resumo"},
+  {a:"101",l:149648,d:"",r:"",o:"",t:"pendente"},
+  {a:"102–103",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"104",l:152521,d:"",r:"",o:"",t:"pendente"},
+  {a:"105",l:153496,d:"",r:"",o:"",t:"pendente"},
+  {a:"106",l:155469,d:"",r:"",o:"",t:"pendente"},
+  {a:"107",l:156697,d:"",r:"",o:"",t:"pendente"},
+  {a:"108",l:158695,d:"",r:"",o:"",t:"pendente"},
+  {a:"109",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"110",l:160609,d:"",r:"",o:"",t:"pendente"},
+  {a:"111",l:161570,d:"",r:"",o:"",t:"pendente"},
+  {a:"112",l:162401,d:"",r:"",o:"",t:"pendente"},
+  {a:"113",l:163328,d:"",r:"",o:"",t:"pendente"},
+  {a:"114",l:163993,d:"",r:"",o:"",t:"pendente"},
+  {a:"115",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"116",l:166300,d:"",r:"",o:"",t:"pendente"},
+  {a:"117",l:167323,d:"",r:"",o:"",t:"pendente"},
+  {a:"118",l:168260,d:"",r:"",o:"",t:"pendente"},
+  {a:"119",l:169272,d:"",r:"",o:"",t:"pendente"},
+  {a:"120",l:170190,d:"",r:"",o:"",t:"pendente"},
+  {a:"121",l:171600,d:"",r:"",o:"",t:"pendente"},
+  {a:"122",l:172818,d:"",r:"",o:"",t:"pendente"},
+  {a:"123",l:174218,d:"",r:"",o:"",t:"pendente"},
+  {a:"124",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"125",l:176185,d:"",r:"",o:"",t:"pendente"},
+  {a:"126",l:176892,d:"",r:"",o:"",t:"pendente"},
+  {a:"127",l:177892,d:"",r:"",o:"",t:"pendente"},
+  {a:"128",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"129",l:180251,d:"",r:"",o:"",t:"pendente"},
+  {a:"130",l:181327,d:"",r:"",o:"",t:"pendente"},
+  {a:"131",l:182292,d:"",r:"",o:"",t:"pendente"},
+  {a:"132",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"133",l:184202,d:"",r:"",o:"",t:"pendente"},
+  {a:"134",l:185548,d:"",r:"",o:"",t:"pendente"},
+  {a:"135–146",l:null,d:"—",r:"",o:"Grande gap de OCR — sem cabeçalhos localizáveis. Conteúdo presente no corpus mas precisa busca temática.",t:"gap"},
+  {a:"147",l:200208,d:"",r:"",o:"",t:"pendente"},
+  {a:"148–149",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"150",l:203706,d:"",r:"",o:"",t:"pendente"},
+  {a:"151",l:205549,d:"",r:"",o:"",t:"pendente"},
+  {a:"152",l:207218,d:"",r:"",o:"",t:"pendente"},
+  {a:"153",l:208771,d:"",r:"",o:"",t:"pendente"},
+  {a:"154",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"155",l:210665,d:"",r:"",o:"",t:"pendente"},
+  {a:"156",l:211662,d:"",r:"",o:"",t:"pendente"},
+  {a:"157",l:212577,d:"",r:"",o:"",t:"pendente"},
+  {a:"158",l:213018,d:"",r:"",o:"",t:"pendente"},
+  {a:"159",l:214118,d:"",r:"",o:"",t:"pendente"},
+  {a:"160",l:215340,d:"",r:"",o:"",t:"pendente"},
+  {a:"161",l:217252,d:"",r:"",o:"",t:"pendente"},
+  {a:"162",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"163",l:219069,d:"",r:"",o:"",t:"pendente"},
+  {a:"164",l:219948,d:"",r:"",o:"",t:"pendente"},
+  {a:"165–168",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"169",l:225012,d:"",r:"",o:"",t:"pendente"},
+  {a:"170",l:225882,d:"",r:"",o:"",t:"pendente"},
+  {a:"171",l:227132,d:"",r:"",o:"",t:"pendente"},
+  {a:"172",l:228398,d:"",r:"",o:"",t:"pendente"},
+  {a:"173",l:229399,d:"",r:"",o:"",t:"pendente"},
+  {a:"174",l:230568,d:"",r:"",o:"",t:"pendente"},
+  {a:"175",l:231710,d:"",r:"",o:"",t:"pendente"},
+  {a:"176",l:233201,d:"",r:"",o:"",t:"pendente"},
+  {a:"177",l:233984,d:"",r:"",o:"",t:"pendente"},
+  {a:"178",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"179",l:235154,d:"",r:"",o:"",t:"pendente"},
+  {a:"180",l:236305,d:"",r:"",o:"",t:"pendente"},
+  {a:"181",l:237742,d:"",r:"",o:"",t:"pendente"},
+  {a:"182",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"183",l:239537,d:"",r:"",o:"",t:"pendente"},
+  {a:"184",l:240215,d:"",r:"",o:"",t:"pendente"},
+  {a:"185",l:241114,d:"",r:"",o:"",t:"pendente"},
+  {a:"186–190",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"191",l:246983,d:"",r:"",o:"",t:"pendente"},
+  {a:"192",l:247941,d:"",r:"",o:"",t:"pendente"},
+  {a:"193",l:248809,d:"",r:"",o:"",t:"pendente"},
+  {a:"194",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"195",l:250609,d:"",r:"",o:"",t:"pendente"},
+  {a:"196",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"197",l:252267,d:"",r:"",o:"",t:"pendente"},
+  {a:"198",l:253258,d:"",r:"",o:"",t:"pendente"},
+  {a:"199",l:254313,d:"",r:"",o:"",t:"pendente"},
+  {a:"200",l:255021,d:"13/04/2013",r:"Filosofia como busca (zeté, zetético) vs. dogmático. As \"duas navegações\" de Platão. Filosofia Primeira como \"a ciência que buscamos\" (Aristóteles). Giovanni Reale e nova interpretação de Platão. Heráclito e Parmênides. Crítica à Filosofia Analítica.",o:"confirmado em índice prévio",t:"resumo"},
+  {a:"201",l:255889,d:"",r:"",o:"",t:"pendente"},
+  {a:"202",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"203",l:258788,d:"",r:"",o:"",t:"pendente"},
+  {a:"204",l:260044,d:"",r:"",o:"",t:"pendente"},
+  {a:"205",l:261001,d:"",r:"",o:"",t:"pendente"},
+  {a:"206",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"207",l:263757,d:"",r:"",o:"",t:"pendente"},
+  {a:"208",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"209",l:266214,d:"",r:"",o:"",t:"pendente"},
+  {a:"210",l:267182,d:"",r:"",o:"",t:"pendente"},
+  {a:"211",l:268694,d:"",r:"",o:"",t:"pendente"},
+  {a:"212",l:269715,d:"",r:"",o:"",t:"pendente"},
+  {a:"213",l:271321,d:"",r:"",o:"",t:"pendente"},
+  {a:"214–216",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"217",l:274493,d:"",r:"",o:"",t:"pendente"},
+  {a:"218",l:276134,d:"",r:"",o:"",t:"pendente"},
+  {a:"219",l:277438,d:"",r:"",o:"",t:"pendente"},
+  {a:"220",l:278944,d:"",r:"",o:"",t:"pendente"},
+  {a:"221",l:280239,d:"",r:"",o:"",t:"pendente"},
+  {a:"222",l:281281,d:"",r:"",o:"",t:"pendente"},
+  {a:"223",l:282347,d:"",r:"",o:"",t:"pendente"},
+  {a:"224",l:283340,d:"",r:"",o:"",t:"pendente"},
+  {a:"225",l:284745,d:"",r:"",o:"",t:"pendente"},
+  {a:"226",l:285465,d:"",r:"",o:"",t:"pendente"},
+  {a:"227",l:286540,d:"",r:"",o:"",t:"pendente"},
+  {a:"228",l:287461,d:"",r:"",o:"",t:"pendente"},
+  {a:"229",l:288263,d:"",r:"",o:"Aula 229 também aparece duplicada na linha 341905 — provável erro OCR para outra numeração",t:"pendente"},
+  {a:"230",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"231",l:289412,d:"",r:"",o:"",t:"pendente"},
+  {a:"232",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"233",l:289981,d:"",r:"",o:"",t:"pendente"},
+  {a:"234",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"235",l:291156,d:"",r:"",o:"",t:"pendente"},
+  {a:"236",l:292021,d:"",r:"",o:"",t:"pendente"},
+  {a:"237",l:292853,d:"",r:"",o:"",t:"pendente"},
+  {a:"238",l:293568,d:"",r:"",o:"",t:"pendente"},
+  {a:"239",l:294508,d:"",r:"",o:"",t:"pendente"},
+  {a:"240",l:295522,d:"",r:"",o:"",t:"pendente"},
+  {a:"241",l:296063,d:"",r:"",o:"texto-base \"Consciência e forma\"",t:"pendente"},
+  {a:"242",l:297192,d:"",r:"",o:"",t:"pendente"},
+  {a:"243",l:298113,d:"",r:"",o:"",t:"pendente"},
+  {a:"244",l:298821,d:"",r:"",o:"",t:"pendente"},
+  {a:"245",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"246",l:299809,d:"",r:"",o:"",t:"pendente"},
+  {a:"247",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"248",l:300764,d:"",r:"",o:"",t:"pendente"},
+  {a:"249",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"250",l:301433,d:"",r:"",o:"",t:"pendente"},
+  {a:"251–252",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"253",l:302337,d:"",r:"",o:"",t:"pendente"},
+  {a:"254–255",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"256",l:303339,d:"",r:"",o:"",t:"pendente"},
+  {a:"257",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"258",l:304260,d:"",r:"",o:"",t:"pendente"},
+  {a:"259",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"260",l:305042,d:"",r:"",o:"",t:"pendente"},
+  {a:"261",l:305671,d:"",r:"",o:"",t:"pendente"},
+  {a:"262",l:306428,d:"",r:"",o:"",t:"pendente"},
+  {a:"263",l:306980,d:"",r:"",o:"",t:"pendente"},
+  {a:"264–270",l:null,d:"—",r:"",o:"Grande gap — sem cabeçalhos localizáveis por busca direta",t:"gap"},
+  {a:"271",l:307613,d:"",r:"",o:"Aula 271 também aparece duplicada na linha 439084 com marcação [Transcrição]",t:"pendente"},
+  {a:"272",l:308279,d:"",r:"",o:"",t:"pendente"},
+  {a:"273",l:309231,d:"",r:"",o:"",t:"pendente"},
+  {a:"274",l:310123,d:"",r:"",o:"",t:"pendente"},
+  {a:"275",l:311069,d:"",r:"",o:"",t:"pendente"},
+  {a:"276",l:311742,d:"",r:"",o:"",t:"pendente"},
+  {a:"277–278",l:null,d:"—",r:"",o:"",t:"gap"},
+  {a:"279",l:312910,d:"",r:"",o:"",t:"pendente"},
+  {a:"280–285",l:null,d:"—",r:"",o:"Grande gap",t:"gap"},
+  {a:"286",l:314033,d:"",r:"",o:"",t:"pendente"},
+  {a:"287–292",l:null,d:"—",r:"",o:"Grande gap",t:"gap"},
+  {a:"293",l:314933,d:"",r:"",o:"",t:"pendente"},
+  {a:"294–300",l:null,d:"—",r:"",o:"Grande gap — provavelmente fim das transcrições \"1-293\" originais e início de novo bloco",t:"gap"},
+  {a:"301",l:315965,d:"",r:"",o:"",t:"pendente"},
+  {a:"302",l:317183,d:"",r:"",o:"",t:"pendente"},
+  {a:"303",l:318121,d:"",r:"",o:"",t:"pendente"},
+  {a:"304",l:318809,d:"",r:"",o:"",t:"pendente"},
+  {a:"305",l:319884,d:"",r:"",o:"",t:"pendente"},
+  {a:"306",l:320899,d:"",r:"",o:"",t:"pendente"},
+  {a:"307",l:322390,d:"",r:"",o:"",t:"pendente"},
+  {a:"308",l:323459,d:"",r:"",o:"",t:"pendente"},
+  {a:"309",l:324268,d:"",r:"",o:"",t:"pendente"},
+  {a:"310",l:326494,d:"",r:"",o:"",t:"pendente"},
+  {a:"311",l:328086,d:"",r:"",o:"",t:"pendente"},
+  {a:"312",l:329136,d:"",r:"",o:"",t:"pendente"},
+  {a:"313",l:330369,d:"",r:"",o:"",t:"pendente"},
+  {a:"314",l:331634,d:"",r:"",o:"",t:"pendente"},
+  {a:"315",l:332423,d:"",r:"",o:"",t:"pendente"},
+  {a:"316",l:333690,d:"",r:"",o:"",t:"pendente"},
+  {a:"317",l:334690,d:"",r:"",o:"",t:"pendente"},
+  {a:"318",l:336351,d:"",r:"",o:"",t:"pendente"},
+  {a:"319",l:337428,d:"",r:"",o:"",t:"pendente"},
+  {a:"320",l:338741,d:"",r:"",o:"",t:"pendente"},
+  {a:"321",l:339923,d:"",r:"",o:"",t:"pendente"},
+  {a:"322",l:341078,d:"",r:"",o:"",t:"pendente"},
+  {a:"323",l:341905,d:"",r:"",o:"corpus mostra \"Aula 229\" — erro OCR para 323",t:"pendente"},
+  {a:"324",l:342887,d:"",r:"",o:"",t:"pendente"},
+  {a:"325",l:343946,d:"",r:"",o:"",t:"pendente"},
+  {a:"326",l:344888,d:"",r:"",o:"",t:"pendente"},
+  {a:"327",l:345740,d:"",r:"",o:"corpus mostra \"Aula 372\" — erro OCR para 327",t:"pendente"},
+  {a:"328",l:346567,d:"",r:"",o:"",t:"pendente"},
+  {a:"329",l:347461,d:"",r:"",o:"",t:"pendente"},
+  {a:"330",l:348441,d:"",r:"",o:"",t:"pendente"},
+  {a:"331",l:349733,d:"",r:"",o:"",t:"pendente"},
+  {a:"332",l:350418,d:"",r:"",o:"",t:"pendente"},
+  {a:"333",l:351290,d:"",r:"",o:"",t:"pendente"},
+  {a:"334",l:352310,d:"",r:"",o:"",t:"pendente"},
+  {a:"335",l:353527,d:"",r:"",o:"",t:"pendente"},
+  {a:"336",l:354287,d:"",r:"",o:"",t:"pendente"},
+  {a:"337",l:355318,d:"",r:"",o:"",t:"pendente"},
+  {a:"338",l:356106,d:"",r:"",o:"",t:"pendente"},
+  {a:"339",l:357058,d:"",r:"",o:"",t:"pendente"},
+  {a:"340",l:358231,d:"",r:"",o:"",t:"pendente"},
+  {a:"341",l:359210,d:"",r:"",o:"",t:"pendente"},
+  {a:"342",l:360162,d:"",r:"",o:"",t:"pendente"},
+  {a:"343",l:361450,d:"",r:"",o:"",t:"pendente"},
+  {a:"344",l:362789,d:"",r:"",o:"",t:"pendente"},
+  {a:"345",l:363951,d:"",r:"",o:"",t:"pendente"},
+  {a:"346",l:364830,d:"",r:"",o:"",t:"pendente"},
+  {a:"347",l:365967,d:"",r:"",o:"",t:"pendente"},
+  {a:"348",l:367039,d:"",r:"",o:"",t:"pendente"},
+  {a:"349",l:368222,d:"",r:"",o:"",t:"pendente"},
+  {a:"350",l:368613,d:"",r:"",o:"",t:"pendente"},
+  {a:"351",l:369792,d:"",r:"",o:"",t:"pendente"},
+  {a:"352",l:370826,d:"",r:"",o:"",t:"pendente"},
+  {a:"353",l:371636,d:"",r:"",o:"",t:"pendente"},
+  {a:"354",l:372193,d:"",r:"",o:"também aparece duplicada na linha 373945",t:"pendente"},
+  {a:"355",l:373100,d:"",r:"",o:"",t:"pendente"},
+  {a:"356",l:null,d:"—",r:"",o:"\"Aula 354\" aparece duas vezes no corpus em vez da 356",t:"gap"},
+  {a:"357",l:374446,d:"",r:"",o:"",t:"pendente"},
+  {a:"358",l:375215,d:"",r:"",o:"",t:"pendente"},
+  {a:"359",l:376124,d:"",r:"",o:"",t:"pendente"},
+  {a:"360",l:376874,d:"",r:"",o:"",t:"pendente"},
+  {a:"361",l:377825,d:"",r:"",o:"",t:"pendente"},
+  {a:"362",l:378492,d:"",r:"",o:"",t:"pendente"},
+  {a:"363",l:379160,d:"",r:"",o:"",t:"pendente"},
+  {a:"364",l:380053,d:"",r:"",o:"",t:"pendente"},
+  {a:"365",l:380826,d:"",r:"",o:"",t:"pendente"},
+  {a:"366",l:381650,d:"",r:"",o:"",t:"pendente"},
+  {a:"367",l:382786,d:"",r:"",o:"",t:"pendente"},
+  {a:"368",l:384037,d:"",r:"",o:"",t:"pendente"},
+  {a:"369",l:384812,d:"",r:"",o:"",t:"pendente"},
+  {a:"370",l:385749,d:"",r:"",o:"",t:"pendente"},
+  {a:"371",l:386704,d:"",r:"",o:"corpus mostra \"Aula 471\" — erro OCR para 371",t:"pendente"},
+  {a:"372",l:387656,d:"",r:"",o:"",t:"pendente"},
+  {a:"373",l:388389,d:"",r:"",o:"",t:"pendente"},
+  {a:"374",l:388946,d:"",r:"",o:"",t:"pendente"},
+  {a:"375",l:389792,d:"",r:"",o:"",t:"pendente"},
+  {a:"376",l:390611,d:"",r:"",o:"",t:"pendente"},
+  {a:"377",l:391279,d:"",r:"",o:"",t:"pendente"},
+  {a:"378",l:391977,d:"",r:"",o:"",t:"pendente"},
+  {a:"379",l:392700,d:"",r:"",o:"",t:"pendente"},
+  {a:"380",l:393411,d:"",r:"",o:"",t:"pendente"},
+  {a:"381–400",l:null,d:"—",r:"",o:"Grande gap — sem cabeçalhos. Provavelmente faixa de aulas com OCR fragmentado ou divisão de transcrições com cabeçalho diferente",t:"gap"},
+  {a:"401",l:394169,d:"23/09/2017",r:"Semiótica de João Poinsot (João de São Tomás, séc. XVII) e Charles Sanders Peirce / John Deely. Signo-parte vs. signo-pensamento: dissolução do dualismo idealista. Realismo ingênuo revalidado. Crítica a Descartes (cogito), Kant, Berkeley, Hume.",o:"confirmado em índice prévio",t:"resumo"},
+  {a:"402",l:394835,d:"",r:"",o:"",t:"pendente"},
+  {a:"403",l:395761,d:"",r:"",o:"",t:"pendente"},
+  {a:"404",l:396718,d:"",r:"",o:"",t:"pendente"},
+  {a:"405",l:397153,d:"",r:"",o:"",t:"pendente"},
+  {a:"406",l:398117,d:"",r:"",o:"",t:"pendente"},
+  {a:"407",l:399148,d:"",r:"",o:"",t:"pendente"},
+  {a:"408",l:399894,d:"",r:"",o:"",t:"pendente"},
+  {a:"409",l:400514,d:"",r:"",o:"",t:"pendente"},
+  {a:"410",l:401062,d:"",r:"",o:"",t:"pendente"},
+  {a:"411",l:401710,d:"",r:"",o:"",t:"pendente"},
+  {a:"412",l:402320,d:"",r:"",o:"",t:"pendente"},
+  {a:"413",l:403274,d:"",r:"",o:"",t:"pendente"},
+  {a:"414",l:403476,d:"",r:"",o:"",t:"pendente"},
+  {a:"415",l:404363,d:"",r:"",o:"",t:"pendente"},
+  {a:"416",l:405033,d:"",r:"",o:"",t:"pendente"},
+  {a:"417",l:406008,d:"",r:"",o:"",t:"pendente"},
+  {a:"418",l:406833,d:"",r:"",o:"",t:"pendente"},
+  {a:"419",l:407530,d:"",r:"",o:"",t:"pendente"},
+  {a:"420",l:408319,d:"",r:"",o:"também duplicada na linha 409035 — erro OCR",t:"pendente"},
+  {a:"421",l:null,d:"—",r:"",o:"\"Aula 420\" aparece duas vezes no corpus em vez da 421",t:"gap"},
+  {a:"422",l:409752,d:"",r:"",o:"",t:"pendente"},
+  {a:"423",l:410433,d:"",r:"",o:"",t:"pendente"},
+  {a:"424",l:410996,d:"",r:"",o:"",t:"pendente"},
+  {a:"425",l:411685,d:"",r:"",o:"",t:"pendente"},
+  {a:"426",l:412173,d:"",r:"",o:"",t:"pendente"},
+  {a:"427",l:412871,d:"",r:"",o:"",t:"pendente"},
+  {a:"428",l:413569,d:"",r:"",o:"",t:"pendente"},
+  {a:"429",l:414355,d:"",r:"",o:"",t:"pendente"},
+  {a:"430",l:415004,d:"",r:"",o:"",t:"pendente"},
+  {a:"431",l:416022,d:"",r:"",o:"",t:"pendente"},
+  {a:"432",l:416716,d:"",r:"",o:"",t:"pendente"},
+  {a:"433",l:417177,d:"",r:"",o:"",t:"pendente"},
+  {a:"434",l:417697,d:"",r:"",o:"",t:"pendente"},
+  {a:"435",l:418325,d:"",r:"",o:"",t:"pendente"},
+  {a:"436",l:419015,d:"",r:"",o:"",t:"pendente"},
+  {a:"437",l:419692,d:"",r:"",o:"",t:"pendente"},
+  {a:"438",l:420038,d:"",r:"",o:"",t:"pendente"},
+  {a:"439",l:420491,d:"",r:"",o:"",t:"pendente"},
+  {a:"440",l:421092,d:"",r:"",o:"",t:"pendente"},
+  {a:"441",l:421580,d:"",r:"",o:"",t:"pendente"},
+  {a:"442",l:422100,d:"",r:"",o:"",t:"pendente"},
+  {a:"443",l:422470,d:"",r:"",o:"",t:"pendente"},
+  {a:"444",l:423230,d:"",r:"",o:"",t:"pendente"},
+  {a:"445",l:424005,d:"",r:"",o:"",t:"pendente"},
+  {a:"446",l:424526,d:"",r:"",o:"",t:"pendente"},
+  {a:"447",l:425037,d:"",r:"",o:"",t:"pendente"},
+  {a:"448",l:425613,d:"",r:"",o:"",t:"pendente"},
+  {a:"449",l:426266,d:"",r:"",o:"",t:"pendente"},
+  {a:"450",l:426772,d:"",r:"",o:"",t:"pendente"},
+  {a:"451",l:427540,d:"",r:"",o:"",t:"pendente"},
+  {a:"452",l:428028,d:"",r:"",o:"",t:"pendente"},
+  {a:"453",l:428381,d:"",r:"",o:"",t:"pendente"},
+  {a:"454",l:428867,d:"",r:"",o:"",t:"pendente"},
+  {a:"455",l:429619,d:"",r:"",o:"",t:"pendente"},
+  {a:"456",l:430075,d:"",r:"",o:"",t:"pendente"},
+  {a:"457",l:430652,d:"",r:"",o:"",t:"pendente"},
+  {a:"458",l:430833,d:"",r:"",o:"",t:"pendente"},
+  {a:"459",l:431400,d:"",r:"",o:"",t:"pendente"},
+  {a:"460",l:431824,d:"",r:"",o:"",t:"pendente"},
+  {a:"461",l:432026,d:"",r:"",o:"",t:"pendente"},
+  {a:"462",l:432454,d:"",r:"",o:"",t:"pendente"},
+  {a:"463",l:null,d:"—",r:"",o:"No corpus aparece \"Aula 5\" na linha 433073 — erro OCR. Conteúdo da Aula 463 está nesse trecho",t:"gap"},
+  {a:"464",l:434317,d:"",r:"",o:"",t:"pendente"},
+  {a:"465",l:435129,d:"",r:"",o:"",t:"pendente"},
+  {a:"466",l:436118,d:"",r:"",o:"",t:"pendente"},
+  {a:"467",l:436700,d:"",r:"",o:"",t:"pendente"},
+  {a:"468",l:437113,d:"",r:"",o:"",t:"pendente"},
+  {a:"469",l:437692,d:"",r:"",o:"",t:"pendente"},
+  {a:"470",l:438498,d:"",r:"",o:"",t:"pendente"},
+  {a:"471",l:null,d:"—",r:"",o:"corpus traz \"Aula 471\" na linha 386704 — provável erro OCR (era 371). Aula 471 real pode estar imediatamente antes da 472",t:"gap"},
+  {a:"472",l:439485,d:"",r:"",o:"",t:"pendente"},
+  {a:"473",l:440273,d:"",r:"",o:"",t:"pendente"},
+  {a:"474",l:440973,d:"",r:"",o:"",t:"pendente"},
+  {a:"475",l:441415,d:"",r:"",o:"",t:"pendente"},
+  {a:"476",l:442268,d:"",r:"",o:"",t:"pendente"},
+  {a:"477",l:442954,d:"",r:"",o:"",t:"pendente"},
+  {a:"478",l:443468,d:"",r:"",o:"",t:"pendente"},
+  {a:"479",l:444032,d:"",r:"",o:"",t:"pendente"},
+  {a:"480",l:444562,d:"",r:"",o:"",t:"pendente"},
+  {a:"481",l:445084,d:"",r:"",o:"",t:"pendente"},
+  {a:"482",l:446066,d:"",r:"",o:"",t:"pendente"},
+  {a:"483",l:446865,d:"",r:"",o:"",t:"pendente"},
+  {a:"484",l:447555,d:"",r:"",o:"",t:"pendente"},
+  {a:"485",l:448101,d:"",r:"",o:"",t:"pendente"},
+  {a:"486",l:448634,d:"",r:"",o:"",t:"pendente"},
+  {a:"487",l:449444,d:"",r:"",o:"",t:"pendente"},
+  {a:"488",l:450100,d:"",r:"",o:"",t:"pendente"},
+  {a:"489",l:450773,d:"",r:"",o:"",t:"pendente"},
+  {a:"490",l:452039,d:"",r:"",o:"",t:"pendente"},
+  {a:"491",l:452860,d:"",r:"",o:"continuação na linha 453274 — Parte 02",t:"pendente"},
+  {a:"492",l:453593,d:"",r:"",o:"",t:"pendente"},
+  {a:"493",l:453840,d:"",r:"",o:"",t:"pendente"},
+  {a:"494",l:454125,d:"",r:"",o:"",t:"pendente"},
+  {a:"495",l:454666,d:"",r:"",o:"",t:"pendente"},
+  {a:"496",l:455353,d:"",r:"",o:"também aparece duplicada na linha 455829",t:"pendente"},
+  {a:"497",l:null,d:"—",r:"",o:"\"Aula 496\" aparece duas vezes no corpus em vez da 497",t:"gap"},
+  {a:"498",l:456564,d:"",r:"",o:"",t:"pendente"},
+  {a:"499",l:457445,d:"",r:"",o:"",t:"pendente"},
+  {a:"500",l:457822,d:"",r:"",o:"",t:"pendente"},
+  {a:"501",l:458469,d:"",r:"",o:"",t:"pendente"},
+  {a:"502",l:459102,d:"",r:"",o:"",t:"pendente"},
+  {a:"503",l:459572,d:"",r:"",o:"",t:"pendente"},
+  {a:"504",l:459937,d:"",r:"",o:"",t:"pendente"},
+  {a:"505",l:460403,d:"",r:"",o:"",t:"pendente"},
+  {a:"506",l:460768,d:"",r:"",o:"cabeçalho: \"Aula 506 - 0h00m - 48m33s\"",t:"pendente"},
+  {a:"507",l:461222,d:"",r:"",o:"",t:"pendente"},
+  {a:"508",l:461909,d:"",r:"",o:"",t:"pendente"},
+  {a:"509",l:462350,d:"",r:"",o:"cabeçalho: \"Aula 509 - 0h00 - 0h47\"",t:"pendente"},
+  {a:"510",l:462795,d:"",r:"",o:"",t:"pendente"},
+  {a:"511",l:463350,d:"",r:"",o:"",t:"pendente"},
+  {a:"512",l:464012,d:"",r:"",o:"",t:"pendente"},
+  {a:"513",l:464651,d:"",r:"",o:"",t:"pendente"},
+  {a:"514",l:465293,d:"",r:"",o:"",t:"pendente"},
+  {a:"515",l:465828,d:"",r:"",o:"",t:"pendente"},
+  {a:"516",l:466364,d:"",r:"",o:"",t:"pendente"},
+  {a:"517",l:467028,d:"",r:"",o:"",t:"pendente"},
+  {a:"518",l:467607,d:"",r:"",o:"cabeçalho: \"Aula 518 - 0h00m - 0h52m\"",t:"pendente"},
+  {a:"519",l:468181,d:"",r:"",o:"",t:"pendente"},
+  {a:"520",l:468823,d:"",r:"",o:"",t:"pendente"},
+  {a:"521",l:469866,d:"",r:"",o:"",t:"pendente"},
+  {a:"522",l:470134,d:"",r:"",o:"",t:"pendente"},
+  {a:"523",l:470651,d:"",r:"",o:"",t:"pendente"},
+  {a:"524",l:471315,d:"",r:"",o:"",t:"pendente"},
+  {a:"525",l:472173,d:"",r:"",o:"",t:"pendente"},
+  {a:"526",l:472612,d:"",r:"",o:"",t:"pendente"},
+  {a:"527",l:473237,d:"",r:"",o:"",t:"pendente"},
+  {a:"528",l:473683,d:"",r:"",o:"",t:"pendente"},
+  {a:"529",l:474658,d:"",r:"",o:"",t:"pendente"},
+  {a:"530",l:475349,d:"",r:"",o:"",t:"pendente"},
+  {a:"531",l:475894,d:"",r:"",o:"",t:"pendente"},
+  {a:"532",l:476442,d:"",r:"",o:"",t:"pendente"},
+  {a:"533",l:476877,d:"",r:"",o:"",t:"pendente"},
+  {a:"534",l:477261,d:"",r:"",o:"",t:"pendente"},
+  {a:"535",l:477941,d:"",r:"",o:"",t:"pendente"},
+  {a:"536",l:478516,d:"",r:"",o:"",t:"pendente"},
+  {a:"537",l:479143,d:"",r:"",o:"",t:"pendente"},
+  {a:"538",l:479615,d:"",r:"",o:"",t:"pendente"},
+  {a:"539",l:480279,d:"",r:"",o:"",t:"pendente"},
+  {a:"540",l:480719,d:"",r:"",o:"",t:"pendente"},
+  {a:"541",l:481519,d:"",r:"",o:"",t:"pendente"},
+  {a:"542",l:482184,d:"",r:"",o:"",t:"pendente"},
+  {a:"543",l:null,d:"—",r:"",o:"corpus salta de 542 a 544",t:"gap"},
+  {a:"544",l:483655,d:"",r:"",o:"",t:"pendente"},
+  {a:"545",l:484291,d:"",r:"",o:"",t:"pendente"},
+  {a:"546",l:484438,d:"",r:"",o:"também transcrição na linha 484445 — Parte 01",t:"pendente"},
+  {a:"547",l:485014,d:"",r:"",o:"",t:"pendente"},
+  {a:"548",l:485913,d:"",r:"",o:"",t:"pendente"},
+  {a:"549",l:486676,d:"",r:"",o:"",t:"pendente"},
+  {a:"550",l:487215,d:"",r:"",o:"",t:"pendente"},
+  {a:"551",l:488001,d:"",r:"",o:"",t:"pendente"},
+  {a:"552",l:489315,d:"",r:"",o:"",t:"pendente"},
+  {a:"553",l:490517,d:"",r:"",o:"",t:"pendente"},
+  {a:"554",l:491084,d:"",r:"",o:"",t:"pendente"},
+  {a:"555",l:null,d:"—",r:"",o:"corpus salta de 554 a 556",t:"gap"},
+  {a:"556",l:491950,d:"",r:"",o:"",t:"pendente"},
+  {a:"557",l:492522,d:"",r:"",o:"",t:"pendente"},
+  {a:"558",l:493137,d:"",r:"",o:"",t:"pendente"},
+  {a:"559",l:493825,d:"",r:"",o:"",t:"pendente"},
+  {a:"560",l:494444,d:"",r:"",o:"",t:"pendente"},
+  {a:"561",l:495201,d:"",r:"",o:"",t:"pendente"},
+  {a:"562",l:496046,d:"",r:"",o:"",t:"pendente"},
+  {a:"563",l:496809,d:"",r:"",o:"",t:"pendente"},
+  {a:"564",l:497588,d:"",r:"",o:"",t:"pendente"},
+  {a:"565",l:498435,d:"",r:"",o:"",t:"pendente"},
+  {a:"566",l:498678,d:"",r:"",o:"",t:"pendente"},
+  {a:"567",l:498989,d:"",r:"",o:"",t:"pendente"},
+  {a:"568",l:499156,d:"",r:"",o:"corpus traz \"Aula 5681\" — provável OCR para 568",t:"pendente"},
+  {a:"569",l:500248,d:"",r:"",o:"corpus traz \"Aula 5691\"",t:"pendente"},
+  {a:"570",l:501470,d:"",r:"",o:"corpus traz \"Aula 5701\"",t:"pendente"},
+  {a:"571",l:502686,d:"",r:"",o:"",t:"pendente"},
+  {a:"572",l:503772,d:"",r:"",o:"",t:"pendente"},
+  {a:"573",l:505209,d:"",r:"",o:"corpus traz \"Aula 5731\"",t:"pendente"},
+  {a:"574",l:506722,d:"",r:"",o:"corpus traz \"Aula 5741\"",t:"pendente"},
+  {a:"575",l:508157,d:"",r:"",o:"corpus traz \"Aula 5751\"",t:"pendente"},
+  {a:"576",l:509633,d:"",r:"",o:"corpus traz \"Aula 5761\"",t:"pendente"},
+  {a:"577",l:511166,d:"",r:"",o:"corpus traz \"Aula 5771\"",t:"pendente"},
+  {a:"578",l:512244,d:"",r:"",o:"corpus traz \"Aula 5781\"",t:"pendente"},
+  {a:"579",l:513105,d:"",r:"",o:"",t:"pendente"},
+  {a:"580",l:513839,d:"",r:"",o:"",t:"pendente"},
+  {a:"581",l:514135,d:"",r:"",o:"",t:"pendente"},
+  {a:"582",l:514574,d:"",r:"",o:"",t:"pendente"},
+  {a:"583",l:515223,d:"",r:"",o:"",t:"pendente"},
+  {a:"584",l:515910,d:"",r:"",o:"",t:"pendente"},
+  {a:"585",l:516912,d:"",r:"",o:"última aula encontrada no corpus",t:"pendente"},
+];
+
+function badge(t) {
+  if (t==="resumo") return '<span class="badge-resumo">Com resumo</span>';
+  if (t==="gap")    return '<span class="badge-gap">Sem cabeçalho</span>';
+  return '<span class="badge-pendente">Pendente</span>';
+}
+
+function renderizar(lista) {
+  const corpo = document.getElementById('corpo');
+  corpo.innerHTML = '';
+  lista.forEach(e => {
+    const tr = document.createElement('tr');
+    tr.className = 'row-' + e.t;
+    const linhaStr = e.l != null ? e.l.toLocaleString('pt-BR') : '—';
+    const dataStr = e.d || '—';
+    let resumoHtml = '';
+    if (e.r) resumoHtml += `<div class="resumo-text">${e.r}</div>`;
+    if (e.o) resumoHtml += `<div class="obs-text">${e.o}</div>`;
+    if (!e.r && !e.o) resumoHtml = badge(e.t);
+    else resumoHtml = badge(e.t) + ' ' + resumoHtml;
+    tr.innerHTML = `<td class="aula-num">Aula ${e.a}</td><td class="linha-num">${linhaStr}</td><td class="data-cell">${dataStr}</td><td>${resumoHtml}</td>`;
+    corpo.appendChild(tr);
+  });
+  document.getElementById('count-info').textContent = `Exibindo ${lista.length} de ${dados.length} entradas`;
+}
+
+function filtrar() {
+  const q = document.getElementById('busca').value.toLowerCase().trim();
+  const tipo = document.getElementById('filtroTipo').value;
+  let lista = dados;
+  if (tipo) lista = lista.filter(e => e.t === tipo);
+  if (q) lista = lista.filter(e =>
+    e.a.toLowerCase().includes(q) ||
+    (e.d && e.d.toLowerCase().includes(q)) ||
+    (e.r && e.r.toLowerCase().includes(q)) ||
+    (e.o && e.o.toLowerCase().includes(q))
+  );
+  renderizar(lista);
+}
+
+renderizar(dados);
+</script>
+</body>
+</html>

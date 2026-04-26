@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Indice das Aulas do COF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="page-index">
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="topbar-icon-link topbar-home-link" href="/" aria-label="Pagina inicial" title="Pagina inicial">
+          <span class="sr-only">Pagina inicial</span>
+        </a>
+        <a class="topbar-icon-link topbar-search-link" href="/" aria-label="Voltar para a busca" title="Voltar para a busca">
+          <span class="sr-only">Voltar para a busca</span>
+        </a>
+      </header>
+
+      <section class="list-header">
+        <p class="eyebrow">Indice mestre</p>
+        <h1>Indice das aulas</h1>
+        <p class="list-description">
+          Navegue pelas 585 aulas, filtre por numero, data ou tema e abra o texto
+          principal a partir do resumo registrado no projeto.
+        </p>
+      </section>
+
+      <main>
+        <section class="action-list" aria-label="Acoes do indice">
+          <article class="action-item">
+            <div class="action-number">01</div>
+            <div class="action-body">
+              <h2 class="action-title">Consultar indice</h2>
+              <p class="action-description">
+                Filtre por numero da aula, data ou tema do resumo para localizar entradas rapidamente.
+              </p>
+            </div>
+            <form id="index-filter-form" class="action-form action-form-search">
+              <label class="sr-only" for="index-filter">Texto do filtro</label>
+              <input
+                id="index-filter"
+                class="text-input"
+                type="text"
+                placeholder="Ex.: 401, necrologio, semiotica, 2017"
+              />
+              <button class="icon-button icon-search-submit" type="submit" aria-label="Pesquisar agora">
+                <span class="sr-only">Pesquisar agora</span>
+              </button>
+              <span class="lesson-term-hint">busca automatica</span>
+            </form>
+          </article>
+
+          <div class="action-extras">
+            <p class="extras-copy">
+              O indice usa o resumo registrado no projeto. Quando uma entrada depende
+              de interpolacao do corpus, isso continua aparecendo no resultado.
+            </p>
+            <label class="toggle-option" for="index-show-all">
+              <input id="index-show-all" type="checkbox" />
+              <span>Ver todas as aulas em uma pagina</span>
+            </label>
+            <div class="example-chips" aria-label="Exemplos de filtro">
+              <button class="chip-button index-example" type="button" data-filter="01">Aula 01</button>
+              <button class="chip-button index-example" type="button" data-filter="necrológio">
+                necrológio
+              </button>
+              <button class="chip-button index-example" type="button" data-filter="401">Aula 401</button>
+              <button class="chip-button index-example" type="button" data-filter="semiótica">
+                semiótica
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="results-section">
+          <div class="results-head">
+            <div>
+              <p class="eyebrow">Indice</p>
+              <h2 id="index-results-title">Aulas do curso</h2>
+            </div>
+            <p id="index-results-subtitle">Carregando o indice completo...</p>
+          </div>
+          <div id="index-feedback" class="feedback" hidden></div>
+          <div id="index-results" class="index-results"></div>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <span>Indice editorial das aulas do COF com leitura e abertura direta.</span>
+        <a class="footer-link" href="/">Voltar para a busca</a>
+      </footer>
+    </div>
+
+    <script src="/indice.js"></script>
+  </body>
+</html>

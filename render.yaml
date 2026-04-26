@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: indicecofteste
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: COF_WEB_PORT
+        value: 10000
+      - key: COF_WEB_HOST
+        value: 0.0.0.0
+      - key: COF_CORPUS_PATH
+        sync: false

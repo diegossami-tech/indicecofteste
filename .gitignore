@@ -1,0 +1,7 @@
+dist/
+*.zip
+config/*.local.json
+tmp/
+web/*.log
+web/*.out.log
+web/*.err.log
