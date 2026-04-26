@@ -23,31 +23,82 @@ const aulaIndexPath = path.join(
 const host = process.env.COF_WEB_HOST || "0.0.0.0";
 const port = Number(process.env.COF_WEB_PORT || 4173);
 
-function resolveCorpusPath() {
+function resolveCorpusSource() {
   if (fs.existsSync(localConfigPath)) {
     const config = JSON.parse(fs.readFileSync(localConfigPath, "utf8"));
     if (config.corpusPath) {
-      return config.corpusPath;
+      return { type: "path", value: config.corpusPath };
     }
   }
 
   if (process.env.COF_CORPUS_PATH) {
-    return process.env.COF_CORPUS_PATH;
+    return { type: "path", value: process.env.COF_CORPUS_PATH };
+  }
+
+  if (process.env.COF_CORPUS_URL) {
+    return { type: "url", value: process.env.COF_CORPUS_URL };
   }
 
   throw new Error(
-    `Caminho do corpus nao configurado. Edite ${localConfigPath}, copie ${exampleConfigPath} ou defina COF_CORPUS_PATH.`,
+    `Corpus nao configurado. Edite ${localConfigPath}, copie ${exampleConfigPath} ou defina COF_CORPUS_PATH/COF_CORPUS_URL.`,
   );
 }
 
-function loadCorpus() {
-  const corpusPath = resolveCorpusPath();
-  const text = fs.readFileSync(corpusPath, "utf8");
-  const lines = text.split(/\r?\n/);
-  return { corpusPath, lines };
+function getRemoteCorpusHeaders() {
+  const headers = {};
+
+  if (process.env.COF_CORPUS_BEARER_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.COF_CORPUS_BEARER_TOKEN}`;
+  }
+
+  if (process.env.COF_CORPUS_AUTH_HEADER_NAME && process.env.COF_CORPUS_AUTH_HEADER_VALUE) {
+    headers[process.env.COF_CORPUS_AUTH_HEADER_NAME] = process.env.COF_CORPUS_AUTH_HEADER_VALUE;
+  }
+
+  return headers;
 }
 
-const corpus = loadCorpus();
+function getCorpusFileNameFromSource(source) {
+  if (source.type === "path") {
+    return path.basename(source.value);
+  }
+
+  const url = new URL(source.value);
+  return path.basename(url.pathname) || "corpus.txt";
+}
+
+async function loadCorpus() {
+  const source = resolveCorpusSource();
+  let text;
+
+  if (source.type === "path") {
+    text = fs.readFileSync(source.value, "utf8");
+  } else {
+    const response = await fetch(source.value, {
+      headers: getRemoteCorpusHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Falha ao baixar o corpus remoto: ${response.status} ${response.statusText}`);
+    }
+
+    text = await response.text();
+  }
+
+  const lines = text.split(/\r?\n/);
+  return {
+    corpusPath: source.value,
+    corpusFileName: getCorpusFileNameFromSource(source),
+    corpusSourceType: source.type,
+    lines,
+  };
+}
+
+let corpus;
+let aulaIndex = [];
+let aulaByNumber = new Map();
+let exactAulas = 0;
+let estimatedAulas = 0;
 
 function normalizeForSearch(value) {
   return value
@@ -206,10 +257,13 @@ function loadAulaIndex() {
   }));
 }
 
-const aulaIndex = loadAulaIndex();
-const aulaByNumber = new Map(aulaIndex.map((aula) => [aula.number, aula]));
-const exactAulas = aulaIndex.filter((aula) => aula.source === "exact").length;
-const estimatedAulas = aulaIndex.filter((aula) => aula.source === "estimated").length;
+function initializeCorpusState(loadedCorpus) {
+  corpus = loadedCorpus;
+  aulaIndex = loadAulaIndex();
+  aulaByNumber = new Map(aulaIndex.map((aula) => [aula.number, aula]));
+  exactAulas = aulaIndex.filter((aula) => aula.source === "exact").length;
+  estimatedAulas = aulaIndex.filter((aula) => aula.source === "estimated").length;
+}
 
 function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, {
@@ -453,7 +507,8 @@ const server = http.createServer((req, res) => {
     if (url.pathname === "/api/meta") {
       sendJson(res, 200, {
         corpusPath: corpus.corpusPath,
-        corpusFileName: path.basename(corpus.corpusPath),
+        corpusFileName: corpus.corpusFileName,
+        corpusSourceType: corpus.corpusSourceType,
         totalLines: corpus.lines.length,
         totalAulas: 585,
         indexedAulas: aulaIndex.length,
@@ -550,8 +605,19 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(port, host, () => {
-  console.log(`COF web disponivel em http://${host}:${port}`);
-  console.log(`Corpus: ${corpus.corpusPath}`);
-  console.log(`Linhas: ${corpus.lines.length}`);
+async function startServer() {
+  const loadedCorpus = await loadCorpus();
+  initializeCorpusState(loadedCorpus);
+
+  server.listen(port, host, () => {
+    console.log(`COF web disponivel em http://${host}:${port}`);
+    console.log(`Corpus: ${corpus.corpusPath}`);
+    console.log(`Origem do corpus: ${corpus.corpusSourceType}`);
+    console.log(`Linhas: ${corpus.lines.length}`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error(`Falha ao iniciar o servidor COF: ${error.message}`);
+  process.exitCode = 1;
 });

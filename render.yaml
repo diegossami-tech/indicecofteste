@@ -13,3 +13,7 @@ services:
         value: 0.0.0.0
       - key: COF_CORPUS_PATH
         sync: false
+      - key: COF_CORPUS_URL
+        sync: false
+      - key: COF_CORPUS_BEARER_TOKEN
+        sync: false

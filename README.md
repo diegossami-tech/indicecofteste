@@ -104,7 +104,19 @@ O projeto agora tem:
 - `render.yaml`
 - suporte a host externo em `web/server.js`
 
-Para funcionar fora da sua maquina, voce ainda precisa definir a variavel `COF_CORPUS_PATH` no painel da Render apontando para o corpus que sera disponibilizado no servidor.
+Para funcionar fora da sua maquina, voce ainda precisa disponibilizar o corpus no ambiente remoto de um destes jeitos:
+
+- `COF_CORPUS_PATH`: caminho local do arquivo no proprio servidor
+- `COF_CORPUS_URL`: URL privada do TXT
+
+Se a URL privada exigir token Bearer, o servidor tambem aceita:
+
+- `COF_CORPUS_BEARER_TOKEN`
+
+Em cenarios mais especificos, tambem da para usar:
+
+- `COF_CORPUS_AUTH_HEADER_NAME`
+- `COF_CORPUS_AUTH_HEADER_VALUE`
 
 ### Link do indice
 
